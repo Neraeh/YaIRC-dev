@@ -126,6 +126,13 @@ void Irc::part(QString _chan)
     foreach (Chan *w, chans) if (w->getName() == _chan) chans.removeAll(w);
 }
 
+void Irc::setNick(QString _nick)
+{
+    socket->write(QString("NICK :" + _nick + "\r\n").toUtf8());
+    emit debugOutput("NICK :" + _nick);
+    nick = _nick;
+}
+
 void Irc::sendMessage(QString _target, QString _message)
 {
     socket->write(QString("PRIVMSG " + _target + " :" + _message + "\r\n").toUtf8());

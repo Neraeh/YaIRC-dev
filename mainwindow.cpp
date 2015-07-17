@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
 
+    textDialog = new TextDialog(this);
     irc = new Irc;
     irc->getChans()->append(new Chan(irc, "#yairc"));
     connect(irc, SIGNAL(debugOutput(QString)), this, SLOT(debugOutput(QString)));
@@ -15,10 +16,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->lineEdit, SIGNAL(returnPressed()), this, SLOT(sendMessage()));
     connect(ui->actionFermer_l_onglet, SIGNAL(triggered()), this, SLOT(closeChannel()));
     connect(ui->actionPlein_cran, SIGNAL(toggled(bool)), this, SLOT(toggleFullscreen(bool)));
+    connect(ui->pushButton, SIGNAL(released()), this, SLOT(nickDialog()));
+    connect(ui->actionRe_joindre_un_channel, SIGNAL(triggered()), this, SLOT(joinDialog()));
     irc->connect("YaIRC", "irc.t411.io", 6667, "YaIRC");
     chanList.append("Serveur");
     chanListModel = new QStringListModel;
     ui->listView->setModel(chanListModel);
+    this->setTabOrder(ui->lineEdit, ui->listView);
+    ui->lineEdit->setFocus();
 }
 
 MainWindow::~MainWindow()
@@ -64,6 +69,29 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     irc->disconnect();
     event->accept();
+}
+
+void MainWindow::nickDialog()
+{
+    dialog = "nick";
+    textDialog->exec();
+}
+
+void MainWindow::joinDialog()
+{
+    dialog = "join";
+    textDialog->exec();
+}
+
+void MainWindow::dialogFinished(QString value)
+{
+    if (dialog == "nick" && value != "" && irc->getNick() != value)
+    {
+        irc->setNick(value);
+        ui->pushButton->setText(value);
+    }
+    else if (dialog == "join" && value.startsWith("#"))
+        irc->join(value);
 }
 
 void MainWindow::changeChannel(QModelIndex chanSelected)

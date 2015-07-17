@@ -22,6 +22,7 @@ public slots:
     void disconnect();
     void join(QString _chan);
     void part(QString _chan);
+    void setNick(QString _nick);
     void sendMessage(QString _chan, QString _message);
     void sendNotice(QString _target, QString _notice);
     void sendAction(QString _target, QString _action);

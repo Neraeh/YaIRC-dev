@@ -7,11 +7,13 @@
 #include <QItemSelection>
 #include <QHash>
 #include "irc.h"
+#include "textdialog.h"
 
 namespace Ui {
 class MainWindow;
 }
 
+class TextDialog;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -20,10 +22,15 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+    void dialogFinished(QString value);
+
 private slots:
     void closeEvent(QCloseEvent *event);
     void debugOutput(QString text);
     void networkStatus(QString text);
+    void nickDialog();
+    void joinDialog();
     void changeChannel(QModelIndex chanSelected);
     void closeChannel();
     void toggleFullscreen(bool checked);
@@ -34,10 +41,11 @@ private slots:
 private:
     Ui::MainWindow *ui;
     Irc *irc;
-    QString chan;
+    QString chan, dialog;
     QHash<QString,QString> chanContent;
     QStringList chanList;
     QStringListModel* chanListModel;
+    TextDialog *textDialog;
 };
 
 #endif // MAINWINDOW_H

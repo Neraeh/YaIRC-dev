@@ -15,12 +15,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     irc.cpp \
     chan.cpp \
-    user.cpp
+    user.cpp \
+    textdialog.cpp
 
 HEADERS  += mainwindow.h \
     irc.h \
     chan.h \
-    user.h
+    user.h \
+    textdialog.h
 
 FORMS    += mainwindow.ui
 
