@@ -12,7 +12,4 @@
         <file>icons/settings.png</file>
         <file>icons/yairc.png</file>
     </qresource>
-    <qresource prefix="/translations">
-        <file>qt_fr.qm</file>
-    </qresource>
 </RCC>

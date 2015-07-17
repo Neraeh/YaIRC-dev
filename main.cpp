@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
     QTranslator french;
-    french.load(":/translations/qt_fr.qm");
+    french.load(a.applicationDirPath() + "/translations/qt_fr.qm");
     a.installTranslator(&french);
     MainWindow w;
     w.show();
