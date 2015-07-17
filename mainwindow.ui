@@ -44,6 +44,9 @@
         <property name="textInteractionFlags">
          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
         </property>
+        <property name="placeholderText">
+         <string>Aucun channel n'est selectionné</string>
+        </property>
        </widget>
       </item>
       <item row="0" column="0">
@@ -167,7 +170,6 @@
     <property name="title">
      <string>&amp;Affichage</string>
     </property>
-    <addaction name="actionMenus"/>
     <addaction name="actionSujet_du_channel"/>
     <addaction name="actionListe_des_utilisateurs"/>
     <addaction name="separator"/>
@@ -178,7 +180,7 @@
      <string>&amp;Serveur</string>
     </property>
     <addaction name="actionD_connecter"/>
-    <addaction name="actionReconnecter"/>
+    <addaction name="actionConnecter"/>
     <addaction name="actionRe_joindre_un_channel"/>
     <addaction name="separator"/>
     <addaction name="action_Liste_des_channels"/>
@@ -285,13 +287,13 @@
     <string>&amp;Déconnecter</string>
    </property>
   </action>
-  <action name="actionReconnecter">
+  <action name="actionConnecter">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/reconnect.png</normaloff>:/icons/icons/reconnect.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Reconnecter</string>
+    <string>&amp;Connecter</string>
    </property>
   </action>
   <action name="actionRe_joindre_un_channel">
@@ -349,6 +351,38 @@
     <hint type="destinationlabel">
      <x>545</x>
      <y>314</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionListe_des_utilisateurs</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>listView_2</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1010</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSujet_du_channel</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>lineEdit_2</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>545</x>
+     <y>40</y>
     </hint>
    </hints>
   </connection>

@@ -23,9 +23,10 @@ public:
 private slots:
     void closeEvent(QCloseEvent *event);
     void debugOutput(QString text);
-    void networkDisplay(QString text);
+    void networkStatus(QString text);
     void changeChannel(QModelIndex chanSelected);
     void closeChannel();
+    void toggleFullscreen(bool checked);
     void sendMessage();
     void onMessage(QString sender, QString target, QString message);
     void onJoin(QString nick, QString target, QString host, QString realname);

@@ -17,12 +17,12 @@ void Irc::connectToServer(QAbstractSocket::SocketError _error)
         switch(socket->state())
         {
             case QAbstractSocket::UnconnectedState: // Tentative de connexion
-                emit networkOutput("Connexion au serveur " + server + ":" + QString::number(port) + " en cours");
+                emit networkOutput("Connecting to " + server + ":" + QString::number(port));
                 emit debugOutput("Connexion au serveur " + server + ":" + QString::number(port) + " en cours");
                 socket->connectToHost(server, port);
                 break;
             case QAbstractSocket::ConnectedState: // Connecté
-                emit networkOutput("Connecté");
+                emit networkOutput("Connected");
                 emit debugOutput("Connecté");
                 socket->write(QString("NICK " + nick + "\r\n").toUtf8());
                 emit debugOutput("NICK " + nick);
@@ -31,14 +31,13 @@ void Irc::connectToServer(QAbstractSocket::SocketError _error)
                 QTimer::singleShot(2000, this, SLOT(joinChans()));
                 break;
             default:
-                emit networkOutput("Erreur de connexion inconnue");
+                emit networkOutput("Unknown error");
                 emit debugOutput("Erreur de connexion inconnue");
         }
     }
     else
     {
-        emit networkOutput("Erreur de connexion");
-        emit networkOutput(socket->errorString());
+        emit networkOutput("Error: " + socket->errorString());
         emit debugOutput("Erreur de connexion");
         emit debugOutput(socket->errorString());
     }

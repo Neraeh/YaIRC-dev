@@ -8,12 +8,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     irc = new Irc;
     irc->getChans()->append(new Chan(irc, "#yairc"));
     connect(irc, SIGNAL(debugOutput(QString)), this, SLOT(debugOutput(QString)));
-    connect(irc, SIGNAL(networkOutput(QString)), this, SLOT(networkDisplay(QString)));
+    connect(irc, SIGNAL(networkOutput(QString)), this, SLOT(networkStatus(QString)));
     connect(irc, SIGNAL(onMessage(QString, QString, QString)), this, SLOT(onMessage(QString, QString, QString)));
     connect(irc, SIGNAL(onJoin(QString, QString, QString, QString)), this, SLOT(onJoin(QString, QString, QString, QString)));
     connect(ui->listView, SIGNAL(clicked(QModelIndex)), this, SLOT(changeChannel(QModelIndex)));
     connect(ui->lineEdit, SIGNAL(returnPressed()), this, SLOT(sendMessage()));
     connect(ui->actionFermer_l_onglet, SIGNAL(triggered()), this, SLOT(closeChannel()));
+    connect(ui->actionPlein_cran, SIGNAL(toggled(bool)), this, SLOT(toggleFullscreen(bool)));
     irc->connect("YaIRC", "irc.t411.io", 6667, "YaIRC");
     chanList.append("Serveur");
     chanListModel = new QStringListModel;
@@ -30,10 +31,33 @@ void MainWindow::debugOutput(QString text)
     qDebug() << text;
 }
 
-void MainWindow::networkDisplay(QString text)
+void MainWindow::networkStatus(QString text)
 {
-    chanContent["Serveur"] += text + "\n";
-    if (chan == "Serveur") ui->textEdit->append(text);
+    if (text == "Connected")
+    {
+        chanContent["Serveur"] += "Connecté\n";
+        if (chan == "Serveur") ui->textEdit->append("Connecté");
+        ui->actionConnecter->setText("Reconnecter");
+    }
+    else if (text.startsWith("Connecting"))
+    {
+        chanContent["Serveur"] += "Connexion en cours\n";
+        if (chan == "Serveur") ui->textEdit->append("Connexion en cours");
+    }
+    else if (text.contains("error", Qt::CaseInsensitive))
+    {
+        if (text.startsWith("Error: "))
+        {
+            chanContent["Serveur"] += "Impossible de se connecter: " + text.mid(7) + "\n";
+            if (chan == "Serveur") ui->textEdit->append("Impossible de se connecter: " + text.mid(7));
+        }
+        else
+        {
+            chanContent["Serveur"] += "Impossible de se connecter: erreur inconnue\n";
+            if (chan == "Serveur") ui->textEdit->append("Impossible de se connecter: erreur inconnue");
+        }
+        ui->actionConnecter->setText("Connecter");
+    }
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -55,6 +79,14 @@ void MainWindow::closeChannel()
     chanListModel->setStringList(chanList);
     chan = chanList.at(0);
     ui->textEdit->setText(chanContent["Serveur"]);
+}
+
+void MainWindow::toggleFullscreen(bool checked)
+{
+    if (checked)
+        this->showFullScreen();
+    else
+        this->showNormal();
 }
 
 void MainWindow::sendMessage()
