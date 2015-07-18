@@ -3,7 +3,13 @@
 User::User(QString _nick, QString _realname = "", QString _host = "", QString _mode = "") : QObject()
 {
     nick = _nick, realname = _realname, host = _host, mode = _mode;
-    mode != "" ? filled = true : filled = false;
+    filled = true;
+}
+
+User::User(QString _nick)
+{
+    nick = _nick;
+    filled = false;
 }
 
 User::~User() {}

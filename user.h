@@ -9,6 +9,7 @@ class User : public QObject
 
 public:
     explicit User(QString _nick, QString _realname, QString _host, QString _mode);
+    explicit User(QString _nick);
     ~User();
     QString getNick();
     QString get(QString _id);

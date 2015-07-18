@@ -14,6 +14,7 @@ class Irc : public QObject
 public:
     explicit Irc();
     ~Irc();
+    bool isConnected();
     QList<Chan*> *getChans();
     QString getNick();
 
@@ -44,6 +45,7 @@ signals:
     void networkOutput(QString);
     void onMessage(QString, QString, QString);
     void onJoin(QString, QString, QString, QString);
+    void usersChange(QString, QStringList);
 };
 
 #endif // IRC

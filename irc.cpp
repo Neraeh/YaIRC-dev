@@ -55,7 +55,13 @@ void Irc::readData()
     emit debugOutput(readLine);
 
     QStringList cmd = readLine.split(" ", QString::SkipEmptyParts);
-    if (cmd.at(1) == "PRIVMSG")
+
+    if (cmd.at(0) == "PING")
+    {
+        socket->write(QString("PONG :" + readLine.mid(6) + "\r\n").toUtf8());
+        emit debugOutput("PONG :" + readLine.mid(6));
+    }
+    else if (cmd.at(1) == "PRIVMSG")
     {
         QString channel = QString(cmd.at(2)).startsWith(":") ? QString(cmd.at(2)).mid(1) : cmd.at(2);
         QString msg;
@@ -79,17 +85,29 @@ void Irc::readData()
         chan->getUserlist().append(new User(nick, realname, host, ""));
         emit onJoin(nick, channel, host, realname);
     }
+    else if (cmd.size() > 2)
+    {
+        if (cmd.at(3) == "=")
+        {
+            Chan *currChan = new Chan;
+            foreach (Chan* w, chans) if (w->getName() == cmd.at(4)) currChan = w;
+            QStringList users = cmd;
+            users.removeFirst(); users.removeFirst(); users.removeFirst(); users.removeFirst(); users.removeFirst(); users.removeFirst();
+            foreach (QString w, users) currChan->addUser(new User(w));
+            emit usersChange(cmd.at(4), users);
+        }
+    }
 
-    if (readLine.startsWith("PING")) { socket->write(QString("PONG :" + readLine.mid(6) + "\r\n").toUtf8()); emit debugOutput("PONG :" + readLine.mid(6)); } // Keep alive
     if (socket->canReadLine()) readData();
 }
 
 void Irc::disconnectFromServer()
 {
-    socket->write("QUIT :YaIRC\r\n");
-    emit debugOutput("QUIT :YaIRC");
+    socket->write(QString("QUIT :" + nick + "\r\n").toUtf8());
+    emit debugOutput("QUIT :" + nick);
     socket->flush();
     socket->disconnect();
+    emit networkOutput("Disconnected");
 }
 
 void Irc::connect(const QString _nick, const QString _server, const unsigned long int _port, const QString _realname)
@@ -101,6 +119,11 @@ void Irc::connect(const QString _nick, const QString _server, const unsigned lon
 void Irc::disconnect()
 {
     this->disconnectFromServer();
+}
+
+bool Irc::isConnected()
+{
+    return socket->state() == QAbstractSocket::ConnectedState ? true : false;
 }
 
 QString Irc::getNick()

@@ -73,6 +73,9 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
        </widget>
       </item>
      </layout>
@@ -96,6 +99,9 @@
         <width>140</width>
         <height>16777215</height>
        </size>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
       </property>
       <property name="resizeMode">
        <enum>QListView::Fixed</enum>
@@ -179,8 +185,8 @@
     <property name="title">
      <string>&amp;Serveur</string>
     </property>
-    <addaction name="actionD_connecter"/>
     <addaction name="actionConnecter"/>
+    <addaction name="actionD_connecter"/>
     <addaction name="actionRe_joindre_un_channel"/>
     <addaction name="separator"/>
     <addaction name="action_Liste_des_channels"/>
@@ -213,6 +219,9 @@
    </property>
   </action>
   <action name="actionFermer_l_onglet">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/close.png</normaloff>:/icons/icons/close.png</iconset>
@@ -279,6 +288,9 @@
    </property>
   </action>
   <action name="actionD_connecter">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/disconnect.png</normaloff>:/icons/icons/disconnect.png</iconset>
@@ -297,6 +309,9 @@
    </property>
   </action>
   <action name="actionRe_joindre_un_channel">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/join_chan.png</normaloff>:/icons/icons/join_chan.png</iconset>
@@ -306,6 +321,9 @@
    </property>
   </action>
   <action name="action_Liste_des_channels">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/list_chans.png</normaloff>:/icons/icons/list_chans.png</iconset>

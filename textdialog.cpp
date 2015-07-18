@@ -18,5 +18,6 @@ TextDialog::~TextDialog() {}
 void TextDialog::returnValue()
 {
     emit finished(lineEdit->text());
+    lineEdit->clear();
     this->close();
 }
